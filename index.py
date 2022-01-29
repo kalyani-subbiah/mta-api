@@ -6,8 +6,12 @@ from subway_api import SubwayApi
 # __name__ = name of current module
 app = Flask(__name__)
 
+@app.route('/')
+def homepage1():
+  return 'Welcome to SubwayApi'
+
 @app.route('/api/')
-def homepage():
+def homepage2():
   return 'Welcome to SubwayApi'
 
 @app.route('/api/stops/<stop_id>')

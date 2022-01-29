@@ -1,6 +1,5 @@
 # https://bennettgarner.medium.com/parsing-gtfs-format-transit-data-in-real-time-with-python-3a528ba7aab7
 import time
-import json
 import os
 
 from google.transit import gtfs_realtime_pb2
@@ -46,8 +45,6 @@ class SubwayApi:
       feeds.append(self.get_feed(url)['entity'])
     # unpack 2d list
     feed = [j for sub in feeds for j in sub]
-    with open("feed.json", "w") as f:
-      json.dump(feed, f)
     return feed
   
   def get_times_for_stop(self, entity, routes):
@@ -97,5 +94,3 @@ class SubwayApi:
     elif "departure" in update.keys():
       return float(update["departure"]["time"]) - time.time()
     else: return None
-
-print(SubwayApi('D16').next_train_time)
