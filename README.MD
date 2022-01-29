@@ -14,19 +14,19 @@ To run:
 
 `pip install -r requirements.txt`
 
-3) Get api key from https://api.mta.info/#/AccessKey and store in a .env file in the root of the directory:
+3) Get api key from https://api.mta.info/#/AccessKey and store the following in a .env file in the root of the directory:
 
 `MTA_API_KEY="<api-key>"`
-
-4) Run Flask app
 
 `export FLASK_ENV=development`
 
 `export FLASK_APP=index.py`
 
+4) Run Flask app
+
 `flask run`
 
-5) To find the next train for the stop, got to `subway_metadata/stops.csv` to find your stop. For example, 137th St City College Station is code '115'. (Do not enter 115N or 115S)
+5) To find the next train for the stop, go to `subway_metadata/stops.csv` to find your stop. For example, 137th St City College Station is code '115'. (Do not enter 115N or 115S)
 
 6) Navigate to:
 
