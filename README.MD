@@ -21,7 +21,9 @@ To run:
 4) Run Flask app
 
 `export FLASK_ENV=development`
+
 `export FLASK_APP=index.py`
+
 `flask run`
 
 5) To find the next train for the stop, got to `subway_metadata/stops.csv` to find your stop. For example, 137th St City College Station is code '115'. (Do not enter 115N or 115S)
