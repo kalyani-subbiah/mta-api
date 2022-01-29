@@ -1,5 +1,5 @@
 # subway-countdown-api
-Simple flask api. Countdown to next train for each stop in the subway. 
+Simple flask api. Countdown to next train for each station in the subway system. 
 Uses MTA Realtime Feeds: https://api.mta.info/#/subwayRealTimeFeeds
 
 To run:
