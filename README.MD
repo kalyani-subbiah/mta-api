@@ -34,9 +34,9 @@ http://127.0.0.1:5000/api/stops/115
 
 ## API fields:
 
-`direction`: `N` (uptown), `S`(downtown)
-`nextTime`: time in seconds to next train
-`route_id`: The route name for the train, see `subway_metadata/routes.csv` for the routes table.
+- `direction`: `N` (uptown), `S`(downtown)
+- `nextTime`: time in seconds to next train
+- `route_id`: The route name for the train, see `subway_metadata/routes.csv` for the routes table.
 
 ## Notes:
 Things to add:
