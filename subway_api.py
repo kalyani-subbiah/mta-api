@@ -1,4 +1,3 @@
-# https://bennettgarner.medium.com/parsing-gtfs-format-transit-data-in-real-time-with-python-3a528ba7aab7
 import time
 import os
 
@@ -7,15 +6,20 @@ from google.protobuf.json_format import MessageToDict
 import requests
 
 from dotenv import load_dotenv
-from feed_entity_utils import get_route_id, get_updates
+from utils import get_route_id, get_updates, get_sorted
 
 load_dotenv()
 
+
 class SubwayApi:
+
+  class Route:
+    def __init__(self, route_id, direction):
+      self.route_id = route_id
+      self.direction = direction   
+
   def __init__(self, closest_stop_id):
-    self.next_refresh = 60
     self.closest_stop_id = str(closest_stop_id)
-    
     self.urls_dict = {
       'ACE': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-ace',
       'BDFM': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-bdfm',
@@ -27,9 +31,8 @@ class SubwayApi:
       'SIR': 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-si'
       }
     self.headers = {"x-api-key": os.getenv("MTA_API_KEY")}
-
     self.feed = self.combine_feeds()
-    self.next_train_time = self.get_next_train_for_stop()
+    self.stop_times = self.get_times_for_stop()
   
   def get_feed(self, url):
     feed = gtfs_realtime_pb2.FeedMessage()
@@ -47,7 +50,7 @@ class SubwayApi:
     feed = [j for sub in feeds for j in sub]
     return feed
   
-  def get_times_for_stop(self, entity, routes):
+  def get_times_for_entity(self, entity, routes):
     """Gets all the next times for each train arriving in the subway station
     Each train is marked by a route. For ex. FX = Brooklyn F Express.
     Includes directions uptown and downtown, which is reflected in the stop id"""
@@ -63,19 +66,16 @@ class SubwayApi:
           routes[route_id].append(time_difference)
     return routes
 
-  def get_next_train_for_stop(self):
-    """Get the minimum/next time for each train's arrival at the station"""
+  def get_times_for_stop(self):
+    """Get the sorted times for each train's arrival at the station"""
     routes = {}
     for entity in self.feed:
       if 'tripUpdate' in entity.keys() and "stopTimeUpdate" in entity['tripUpdate'].keys(): 
-        routes = self.get_times_for_stop(entity, routes) 
-    routes = self.get_mins(routes)
+        routes = self.get_times_for_entity(entity, routes) 
+    routes = get_sorted(routes)
     routes = self.split_directions(routes)
     return routes      
   
-  @staticmethod
-  def get_mins(dict_of_lists):
-    return [{'route': k, 'nextTime': min(x)} if x != [] else None for (k,x)  in dict_of_lists.items()]
 
   @staticmethod
   def split_directions(routes):
@@ -94,3 +94,5 @@ class SubwayApi:
     elif "departure" in update.keys():
       return float(update["departure"]["time"]) - time.time()
     else: return None
+
+#print(SubwayApi('115').stop_times)
