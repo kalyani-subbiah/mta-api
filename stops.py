@@ -1,6 +1,4 @@
-import geopy.distance
 import pandas as pd
-from utils import get_sorted
 
 STOPS_FILE = "subway_metadata/stops.csv"
 
@@ -11,13 +9,15 @@ class Stops:
     self.stops = self.get_stops()
   
   def get_stop_info(self,stop_id):
-    stop_row = self.stops_df.loc(self.stops_df['stop_id'] == self.stop_id)
-    return {'stop_name': str(self.stop_row['stop_name']), 'stop_lat': str(self.stop_row['stop_lat']), 'stop_lon': str(self.stop_row['stop_lon'])}
+    stop_row = self.stops_df.loc[self.stops_df['stop_id'] == stop_id]
+    return {'stop_id':stop_id, 'name': str(stop_row['stop_name'].item()), 'lat': str(stop_row['stop_lat'].item()), 'lon': str(stop_row['stop_lon'].item())}
 
   def get_stops(self):
-    stops = {}
+    stops = []
     for stop_id in self.stops_df['stop_id']:
-      stops[stop_id] = self.get_stop_info(stop_id)
+      if stop_id[-1] == "N" or stop_id[-1] == "S":
+        continue
+      stops.append(self.get_stop_info(stop_id))
     return stops
 
 
