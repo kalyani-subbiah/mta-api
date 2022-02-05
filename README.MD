@@ -26,16 +26,16 @@ To run:
 
 `flask run`
 
-5) To find the next train for the stop, go to `subway_metadata/stops.csv` to find your stop. For example, 137th St City College Station is code '115'. (Do not enter 115N or 115S)
+5) To find the next train for the stop, go to 'http://localhost:5000/api/stops/' to find your station. Note down the `station_id` field. For ex. `Times Sq-42 St` has the `station_id` = 38.
 
 6) Navigate to:
 
-http://127.0.0.1:5000/api/stops/115
+http://localhost:5000/api/train_times/38
 
 ## API fields:
 
 - `direction`: `N` (uptown), `S`(downtown)
-- `nextTime`: time in seconds to next train
+- `times`: time in seconds to next trains
 - `route_id`: The route name for the train, see `subway_metadata/routes.csv` for the routes table.
 
 ## Notes:

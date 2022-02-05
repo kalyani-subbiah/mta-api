@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 from markupsafe import escape 
@@ -22,12 +24,21 @@ def routes():
   routes = Routes().routes
   return jsonify(routes)
 
-@app.route('/api/train_times/<stop_id>')
-def nextTrains(stop_id):
+@app.route('/api/train_times/<station_id>')
+def nextTrains(station_id):
+  station_routes = []
+  stops = Stops().stops
   routes = Routes().routes
-  return jsonify({stop_id: routes[stop_id]})
+  for stop in stops:
+    if stop['station_id'] == int(station_id):
+      for stopId in stop['stop_ids']:
+        stop_routes = list(filter(lambda route: route['stop_id'] == stopId, routes))
+        for route in stop_routes:
+          route['station_id'] = station_id
+          station_routes.append(route)
+  return jsonify(station_routes)
 
-@app.route('/api/stops/')
+@app.route('/api/stations/')
 def stops():
   stops = Stops().stops
   return jsonify(stops)
