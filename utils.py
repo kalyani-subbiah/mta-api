@@ -8,7 +8,8 @@ def get_route_id(entity):
 def get_updates(entity):
   updates = entity["tripUpdate"]["stopTimeUpdate"]
   return updates
-
+"""
 def get_sorted(dict1):
-  """In a dict where the values are lists, sort the lists"""
+  In a dict where the values are lists, sort the lists
   return [{'route': k, 'times': v} for k, v in sorted(dict1.items(), key=lambda item: item[1])]
+"""
